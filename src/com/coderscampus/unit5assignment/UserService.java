@@ -33,15 +33,7 @@ public class UserService {
 	public static void appInput() {
 		
 		//initialize objects
-		String[] userStringArray = new String[12]; //set to 4 since 4 * 3 = 12 lines
-		String[] sourceArray = new String[4]; //set to 4 since data.txt has 4 lines
-		String[] splitStringArray = new String[12];		
-		User[] userArray = new User[12];
-		User user = new User();
-		UserService userService = new UserService();		
 		Scanner inputScanner = new Scanner(System.in);		
-		BufferedReader fileReader = null;
-		int k = 0;
 		
 		//=================BEGIN input from USER====================
 		//show prompt for user's input, assign value to variables
@@ -51,91 +43,51 @@ public class UserService {
 		String passwordInput = inputScanner.nextLine();
 		//close scanner, pass the input into other method for validation
 		inputScanner.close();
-		//================END input from the USER================										
+		//================END input from the USER================
 		
-		//read file to String Array				
-		try { //read the file
-			
-			fileReader = new BufferedReader(new FileReader("data.txt")); //had to create data.txt outside src folder 				
-			//start at index 0 for the array
-			int i = 0;
-			String textLine = "";				
-			
-			//read the file until an empty (null) line is reached into stringArray
-			while ((textLine = fileReader.readLine()) != null) {							
-				//insert data into the array
-				sourceArray[i] = textLine.toString();
-				//feedback for my troubleshooting
-				System.out.println("Line at index " + i + ": " + sourceArray[i].toString());				
-				i++;
-				}				
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("Oops, the file wasn't found");
-			e.printStackTrace();			
-		}  catch(IOException e){
-			System.out.println("Oops, there was an IO exception");
-		}
-			finally {	
-					try {
-							System.out.println("Closing file reader");
-							fileReader.close();
-					} catch (IOException e){
-							System.out.println("Oops! An IOException has occurred");
-							e.printStackTrace();
-					}
-		}		
-
-		//System.out.println("userArray Index Value Check: " + userArray);
-		//input users into the array after parsing					
-		String[] newArray = parseText(sourceArray);		
-		
-		//somewhere load up an array of users userArray[i] = userService.createUser(null, null, null);
-		
-		//send user input for validation
-		//appInputCheck(usernameInput, passwordInput); 
-	}	
-	//========================================================
-	public static String[] parseText(String[] inputs) {
-		//this method will move elements from all being on the same line and split them onto their own		
-		String[] goodArray = new String[12];
-		int k = 0;
-		
-				for (String input: inputs) {
-					String[] badArray = input.split(",");
-					
-					for (int i = 0; i < goodArray.length; i++) {
-						int j = 0;
-						while (j < badArray.length && k < goodArray.length){
-							goodArray[k] = badArray[j];	
-							j++;
-							k++;
-						}
-					}
-										
-				}
-				
-				for (String textValue : goodArray) {
-					System.out.println("ForEachLoop Output:\n " + textValue);
-					System.out.println("Value at Array Index " + goodArray[3]);
-				}												
-
-			return goodArray;
-		}				
+		appInputCheck(usernameInput, passwordInput);
+							
+		//somewhere load up an array of users userArray[i] = userService.createUser(null, null, null);		
+	}			
 	//========================================================
 	public static void appInputCheck(String username, String password) {
 		//initialize objects
-		
-		//for each loop? Maybe do it in the try block instead
-				
-		//read data from data.txt
-		//insert it into an array
-		//check user input against array
-		
+		String realName = "";	
+
+		//check user input against array of Users
 			
-			System.out.println("END");
+		//give feedback against login creds				
+			System.out.println("Welcome: " + realName);
+			
+			
+			System.out.println("Invalid login, please try again.");
 	}
-	
+	//=========================================================
+	public String[] convertFile() {
+		//create objects
+		String[] anArray = new String[100];
+		BufferedReader fileReader = null;
+		
+		//begin reading the data.txt file, then split, and return
+		try {
+			fileReader = new BufferedReader(new FileReader("data.txt"));
+			String aLine = "";
+			while ((aLine = fileReader.readLine()) != null) {				
+				anArray = aLine.split(",");
+			}			 		
+		} catch (FileNotFoundException e) {
+			System.out.println("Oops, a File  Not Found Exception occurred!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Oops, an IOException occurred!");
+			e.printStackTrace();
+		}
+				
+		return anArray;
+	}
+	//=========================================================
+
+	//========================================================
 	public static void testMethod() {
 		
 		String[] newArray = new String[12];
@@ -146,18 +98,19 @@ public class UserService {
 		int k = 0;
 		
 		try {
-			fileScanner = new Scanner(textFile);
-			
+			fileScanner = new Scanner(textFile);			
 			while(fileScanner.hasNextLine()) {
 			
 				String initialText = fileScanner.nextLine();
 				splitArray = initialText.split(",");
 				
-				for (int i = 0; i < newArray.length; i++) {
+				for (int i = 0; i < 4; i++) {
 					int j = 0;
-					//System.out.println(k);
+					//System.out.println(k); this shows increments of 3 for k, while loop
+					//runs up to length of splitArray, which is 3
+					//3 * 4 == 12, matching length of newArray
 					
-					//add the 3 elements into a new array
+					//add the 3 elements into a newArray from splitArray 
 					while (j < splitArray.length && k < newArray.length){
 						newArray[k] = splitArray[j];	
 						j++;
@@ -166,9 +119,12 @@ public class UserService {
 				}
 									
 				for (String splitText : splitArray) {
-					 System.out.println("ForEachLoop Output:\n " + splitText);
-					 newArray = splitArray;
-					//System.out.println("Value at Array Index " + lineData[3]);
+					newArray = splitArray; 					
+					System.out.println(" ForEachLoop Output:\n " + splitText);
+					 
+					//this sysout goes out of bounds whenever newArray = splitArray
+					//and whenever I go past index 2 for splitArray (e.g. 3)
+					//System.out.println("Value at Array Index " + splitArray[3]);
 				}												
 			}
 			fileScanner.close();
@@ -177,7 +133,7 @@ public class UserService {
 			
 			fileScanner.close();
 			e.printStackTrace();
-		}	//System.out.println("StringArray: " + stringArray[3]);		
+		}	
 		
 	}
 		
