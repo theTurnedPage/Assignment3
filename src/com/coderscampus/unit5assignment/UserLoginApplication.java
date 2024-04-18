@@ -8,7 +8,8 @@ public class UserLoginApplication {
 		//call method to prompt user input
 		//validate user input against the data.txt
 		//output the outcome
-		UserService.appInput();
+		//UserService.appInput();
+		UserService.testMethod();
 				
 	}
 
