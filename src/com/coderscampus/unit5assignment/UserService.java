@@ -26,6 +26,7 @@ public class UserService {
 		newUser.setUsername(username);
 		newUser.setPassword(password);	 
 		newUser.setName(name);
+		System.out.println("User Created");
 		//return instance of object
 		return newUser;
 	}	
@@ -52,9 +53,11 @@ public class UserService {
 	//========================================================
 	public static void appInputCheck(String username, String password) {
 		//initialize objects
-		String realName = "";	
+		String realName = "";			
+
 
 		//check user input against array of Users
+		
 			
 		//give feedback against login creds				
 			System.out.println("Welcome: " + realName);
@@ -63,30 +66,91 @@ public class UserService {
 			System.out.println("Invalid login, please try again.");
 	}
 	//=========================================================
-	public String[] convertFile() {
+	public static String[] convertFile() throws IOException {
 		//create objects
-		String[] anArray = new String[100];
+		String[] newArray = new String[12];
+		String[] splitArray = new String[12];
 		BufferedReader fileReader = null;
+		int k = 0;
 		
 		//begin reading the data.txt file, then split, and return
 		try {
 			fileReader = new BufferedReader(new FileReader("data.txt"));
 			String aLine = "";
 			while ((aLine = fileReader.readLine()) != null) {				
-				anArray = aLine.split(",");
-			}			 		
+										 				
+				for (int i = 0; i < 4; i++) {
+					int j = 0;
+					//System.out.println(k); this shows increments of 3 for k, while loop
+					//runs up to length of splitArray, which is 3
+					//3 * 4 == 12, matching length of newArray
+					
+					aLine = fileReader.readLine();
+					newArray = aLine.split(",");
+					
+					//add the 3 elements into a newArray from splitArray 
+					while (j < splitArray.length && k < newArray.length){
+						newArray[k] = splitArray[j];	
+						j++;
+						k++;
+					} 
+				}
+			}
+				
+			fileReader.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Oops, a File  Not Found Exception occurred!");
+			System.out.println("Oops, a File  Not Found Exception occurred!");			
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e) {			
 			System.out.println("Oops, an IOException occurred!");
 			e.printStackTrace();
 		}
 				
-		return anArray;
+		return newArray;
 	}
 	//=========================================================
-
+	public static User[] fillUserArray() {
+				
+		String[] stringArray = null;
+		User[] userArray = new User[4]; //4 registered users
+		int j = 0;
+		
+		try {
+			stringArray = convertFile();				
+		} catch (IOException e) {
+			System.out.println("Oops! An IOException has occurred.");
+			e.printStackTrace();
+		}
+		//usernames at 0, 3, 6, 9 therefor jump 3 places at a time
+		for (int i = 0; i < 9; i+=3)
+		{	//username password name
+			while(j < 4) {
+				UserService userService = new UserService();
+				userArray[j] = userService.createUser(stringArray[i], stringArray[i+1], stringArray[i+2]);
+				j+=1;
+			}			
+		}			
+	return userArray;			
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//========================================================
 	public static void testMethod() {
 		
@@ -100,15 +164,15 @@ public class UserService {
 		try {
 			fileScanner = new Scanner(textFile);			
 			while(fileScanner.hasNextLine()) {
-			
-				String initialText = fileScanner.nextLine();
-				splitArray = initialText.split(",");
-				
+						
 				for (int i = 0; i < 4; i++) {
 					int j = 0;
 					//System.out.println(k); this shows increments of 3 for k, while loop
 					//runs up to length of splitArray, which is 3
 					//3 * 4 == 12, matching length of newArray
+					
+					String initialText = fileScanner.nextLine();
+					splitArray = initialText.split(",");
 					
 					//add the 3 elements into a newArray from splitArray 
 					while (j < splitArray.length && k < newArray.length){
@@ -118,8 +182,8 @@ public class UserService {
 					}
 				}
 									
-				for (String splitText : splitArray) {
-					newArray = splitArray; 					
+				for (String splitText : newArray) {
+									
 					System.out.println(" ForEachLoop Output:\n " + splitText);
 					 
 					//this sysout goes out of bounds whenever newArray = splitArray
