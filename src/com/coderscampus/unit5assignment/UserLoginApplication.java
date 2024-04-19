@@ -9,7 +9,6 @@ public class UserLoginApplication {
 		//validate user input against the data.txt
 		//output the outcome
 		UserService.appInput();
-		//UserService.testMethod();
 				
 	}
 

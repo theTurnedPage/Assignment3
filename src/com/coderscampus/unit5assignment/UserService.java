@@ -46,38 +46,43 @@ public class UserService {
 		//close scanner, pass the input into other method for validation
 		
 		//================END input from the USER================
-		
+				
 		appInputCheck(usernameInput, passwordInput);
-		inputScanner.close();					
+		inputScanner.close();
 		//somewhere load up an array of users userArray[i] = userService.createUser(null, null, null);		
 	}			
 	//========================================================
 	public static void appInputCheck(String username, String password) {
 		//initialize object(s)			
 		User realUsers[] = fillUserArray();
+		boolean loginCorrect = false;
 		//check user input against array of Users then
 		//give feedback against login creds
 		int i = 0;
+
 		while (User.loginAttemptsBeforeLock > 1) {
 					
-		while (i < 4) { //username isn't case sensitive, password is
-			if (username.equalsIgnoreCase(realUsers[i].getUsername()) && password == realUsers[i].getPassword()) {
+		 //username isn't case sensitive, password is			
+			if (username.equalsIgnoreCase(realUsers[i].getUsername().toString()) && password.equals(realUsers[i].getPassword().toString())) {
 				System.out.println("Welcome: " + realUsers[i].getName());
+				homeScreen();				
+				break;
 			} else {
-				System.out.println("Invalid login, please try again.");				
-				User.loginAttemptsBeforeLock--; //lower login attempts
+				User.loginAttemptsBeforeLock--; //lower login attempts remaining				
+				System.out.println("Invalid login, please try again.");								
 				System.out.println("You have " + User.loginAttemptsBeforeLock + " attempts remaining");
-				appInput(); //return user to login again
-			}						
-			i++;
-		}
-		}				
+				
+			}
+			appInput(); //return user to login again										
+			}
+			i++;	
+		
 			//yeah, I know this is a little lazy . . . 
 		if (User.loginAttemptsBeforeLock == 1 || User.loginAttemptsBeforeLock == 0) {
-			lockoutScreen(); 	
+			lockoutScreen();			
 			System.exit(0); //force app to terminate
-		}					
-	}
+		}
+	}					
 	//========================================================
 	public static void lockoutScreen() {
 		
@@ -96,10 +101,8 @@ public class UserService {
 		
 		//begin reading the data.txt file, then split, and return
 		try {
-			fileReader = new BufferedReader(new FileReader("data.txt"));
-			
-							
-										 				
+			fileReader = new BufferedReader(new FileReader("data.txt"));		
+																 				
 				for (int i = 0; i < 4; i++) {
 					
 					//System.out.println(k); this shows increments of 3 for k, while loop
@@ -154,4 +157,8 @@ public class UserService {
 	return userArray;			
 	}
 	//========================================================
+	public static void homeScreen() {
+		System.out.println("\nHOME\n-------\n");
+		System.out.println("\\Under Construction\\");
+	}
 }
