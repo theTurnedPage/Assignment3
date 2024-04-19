@@ -64,24 +64,22 @@ public class UserService {
 					
 		 //username isn't case sensitive, password is			
 			if (username.equalsIgnoreCase(realUsers[i].getUsername().toString()) && password.equals(realUsers[i].getPassword().toString())) {
-				System.out.println("Welcome: " + realUsers[i].getName());
-				homeScreen();				
+				System.out.println("Welcome: " + realUsers[i].getName());						
 				break;
 			} else {
 				User.loginAttemptsBeforeLock--; //lower login attempts remaining				
 				System.out.println("Invalid login, please try again.");								
-				System.out.println("You have " + User.loginAttemptsBeforeLock + " attempts remaining");
-				
+				System.out.println("You have " + User.loginAttemptsBeforeLock + " attempt(s) remaining");				
 			}
 			appInput(); //return user to login again										
 			}
 			i++;	
-		
+			
 			//yeah, I know this is a little lazy . . . 
 		if (User.loginAttemptsBeforeLock == 1 || User.loginAttemptsBeforeLock == 0) {
 			lockoutScreen();			
 			System.exit(0); //force app to terminate
-		}
+		 } homeScreen();	
 	}					
 	//========================================================
 	public static void lockoutScreen() {
@@ -160,5 +158,6 @@ public class UserService {
 	public static void homeScreen() {
 		System.out.println("\nHOME\n-------\n");
 		System.out.println("\\Under Construction\\");
+		System.exit(0); //force exit, yes this is putting a band-aid on the exception haha :-)
 	}
 }
