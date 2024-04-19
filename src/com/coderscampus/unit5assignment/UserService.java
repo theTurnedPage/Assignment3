@@ -156,7 +156,7 @@ public class UserService {
 	}
 	//========================================================
 	public static void homeScreen() {
-		System.out.println("\nHOME\n-------\n");
+		System.out.println("\nHOME\n-------\n(⌐ ͡■ ͜ʖ ͡■)");
 		System.out.println("\\Under Construction\\");
 		System.exit(0); //force exit, yes this is putting a band-aid on the exception haha :-)
 	}
