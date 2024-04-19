@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.Scanner;
 
 public class UserService {
@@ -26,7 +27,7 @@ public class UserService {
 		newUser.setUsername(username);
 		newUser.setPassword(password);	 
 		newUser.setName(name);
-		System.out.println("User Created");
+		//System.out.println("User Created");
 		//return instance of object
 		return newUser;
 	}	
@@ -43,27 +44,43 @@ public class UserService {
 		appPasswordPrompt();
 		String passwordInput = inputScanner.nextLine();
 		//close scanner, pass the input into other method for validation
-		inputScanner.close();
+		
 		//================END input from the USER================
 		
 		appInputCheck(usernameInput, passwordInput);
-							
+		inputScanner.close();					
 		//somewhere load up an array of users userArray[i] = userService.createUser(null, null, null);		
 	}			
 	//========================================================
 	public static void appInputCheck(String username, String password) {
-		//initialize objects
-		String realName = "";			
-
-
-		//check user input against array of Users
+		//initialize object(s)			
+		User realUsers[] = fillUserArray();
+		//check user input against array of Users then
+		//give feedback against login creds
+		int i = 0;
+		while (User.loginAttemptsBeforeLock != 0) {
+					
+		while (i < 4) {
+			if (username == realUsers[i].getUsername() && password == realUsers[i].getPassword()) {
+				System.out.println("Welcome: " + realUsers[i].getName());
+			} else {
+				System.out.println("Invalid login, please try again.");
+				User.loginAttemptsBeforeLock--; //lower login attempts
+				appInput(); //return user to login again
+			}						
+			i++;
+		}}				
 		
-			
-		//give feedback against login creds				
-			System.out.println("Welcome: " + realName);
-			
-			
-			System.out.println("Invalid login, please try again.");
+		if (User.loginAttemptsBeforeLock == 0) {
+			lockoutScreen();						
+		}
+					
+	}
+	//========================================================
+	public static void lockoutScreen() {
+		
+		System.out.println("\n(ㅠ﹏ㅠ)\n_____________________________________________________\n");
+		System.out.println("Too many failed login attempts, you are now locked out.");
 	}
 	//=========================================================
 	public static String[] convertFile() throws IOException {
@@ -71,12 +88,14 @@ public class UserService {
 		String[] newArray = new String[12];
 		String[] splitArray = new String[12];
 		BufferedReader fileReader = null;
+		String aLine = "";
+		
 		int k = 0;
 		
 		//begin reading the data.txt file, then split, and return
 		try {
 			fileReader = new BufferedReader(new FileReader("data.txt"));
-			String aLine = "";
+			
 			while ((aLine = fileReader.readLine()) != null) {				
 										 				
 				for (int i = 0; i < 4; i++) {
@@ -85,7 +104,7 @@ public class UserService {
 					//runs up to length of splitArray, which is 3
 					//3 * 4 == 12, matching length of newArray
 					
-					aLine = fileReader.readLine();
+					
 					newArray = aLine.split(",");
 					
 					//add the 3 elements into a newArray from splitArray 
@@ -132,7 +151,7 @@ public class UserService {
 		}			
 	return userArray;			
 	}
-	
+	//========================================================
 	
 	
 	
