@@ -75,8 +75,8 @@ public class UserService {
 			}
 			i++;	
 			
-			//yeah, I know this is a little lazy . . . 
-		if (User.loginAttemptsBeforeLock == 1 || User.loginAttemptsBeforeLock == 0) {
+			//Lockout screen, having the other part of the condition was wholly unnecessary and is now removed
+		if (User.loginAttemptsBeforeLock == 0) {
 			lockoutScreen();			
 			System.exit(0); //force app to terminate
 		 } homeScreen();	
